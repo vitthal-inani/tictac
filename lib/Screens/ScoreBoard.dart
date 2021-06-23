@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'GameScreen.dart';
+import 'package:tic_tac/Utilities/GlobalUtils.dart';
 
 class ScoreBoard extends StatefulWidget {
   const ScoreBoard({Key? key, required this.currState, required this.cntr})
