@@ -8,18 +8,22 @@ class LocalGame extends GetxController {
     ["", "", ""],
     ["", "", ""]
   ];
-  int cntr=0;
+  int cntr = 0;
   Wins winstate = Wins.ONGOING;
-  int p1score=0;
-  int p2score=0;
+  int p1score = 0;
+  int p2score = 0;
 
-  void clear(){
+  void clear(String player) {
     board = [
       ["", "", ""],
       ["", "", ""],
       ["", "", ""]
     ];
-    cntr = 0;
+    cntr = (player == "P1")
+        ? 0
+        : (player == "P2")
+            ? 1
+            : Random().nextInt(10) % 2;
     winstate = Wins.ONGOING;
   }
 }

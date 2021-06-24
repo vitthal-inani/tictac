@@ -36,8 +36,60 @@ class _GameScreenState extends State<GameScreen> {
             style: ElevatedButton.styleFrom(
                 elevation: 0, primary: Colors.transparent),
             onPressed: () {
-              setState(() {
-                local.clear();
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return Dialog(
+                      child: SizedBox(
+                        height: _size.height * 0.4,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Wrap(children: [
+                              Text(
+                                "Select the player that goes first",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 32, color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            ]),
+                            ElevatedButton(
+                              onPressed: () => Navigator.pop(context, "Random"),
+                              child: Text(
+                                "Random",
+                                style: GoogleFonts.bowlbyOne(
+                                    fontSize: 40, color: Colors.white),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, "P1"),
+                                  child: Text(
+                                    "P1",
+                                    style: GoogleFonts.bowlbyOne(
+                                        fontSize: 48, color: Colors.white),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.pop(context, "P2"),
+                                  child: Text(
+                                    "P2",
+                                    style: GoogleFonts.bowlbyOne(
+                                        fontSize: 48, color: Colors.white),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }).then((value) {
+                setState(() {
+                  local.clear(value);
+                });
               });
             },
             icon: Icon(
