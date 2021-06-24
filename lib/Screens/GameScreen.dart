@@ -40,49 +40,58 @@ class _GameScreenState extends State<GameScreen> {
                   context: context,
                   builder: (context) {
                     return Dialog(
-                      child: SizedBox(
-                        height: _size.height * 0.4,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Wrap(children: [
-                              Text(
-                                "Select the player that goes first",
-                                style: GoogleFonts.montserrat(
-                                    fontSize: 32, color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            ]),
-                            ElevatedButton(
-                              onPressed: () => Navigator.pop(context, "Random"),
-                              child: Text(
-                                "Random",
-                                style: GoogleFonts.bowlbyOne(
-                                    fontSize: 40, color: Colors.white),
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () => Navigator.pop(context, "P1"),
-                                  child: Text(
-                                    "P1",
-                                    style: GoogleFonts.bowlbyOne(
-                                        fontSize: 48, color: Colors.white),
-                                  ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: _size.height * 0.5,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                        child: SizedBox(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Wrap(children: [
+                                Text(
+                                  "Select the player that goes first",
+                                  style: GoogleFonts.montserrat(
+                                      fontSize: 32, color: Colors.black),
+                                  textAlign: TextAlign.center,
                                 ),
-                                ElevatedButton(
-                                  onPressed: () => Navigator.pop(context, "P2"),
-                                  child: Text(
-                                    "P2",
-                                    style: GoogleFonts.bowlbyOne(
-                                        fontSize: 48, color: Colors.white),
+                              ]),
+                              ElevatedButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, "Random"),
+                                child: Text(
+                                  "Random",
+                                  style: GoogleFonts.bowlbyOne(
+                                      fontSize: 40, color: Colors.white),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, "P1"),
+                                    child: Text(
+                                      "P1",
+                                      style: GoogleFonts.bowlbyOne(
+                                          fontSize: 48, color: Colors.white),
+                                    ),
                                   ),
-                                )
-                              ],
-                            )
-                          ],
+                                  ElevatedButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, "P2"),
+                                    child: Text(
+                                      "P2",
+                                      style: GoogleFonts.bowlbyOne(
+                                          fontSize: 48, color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     );
