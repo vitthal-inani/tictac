@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tic_tac/Models/LocalGame.dart';
 import 'package:tic_tac/Utilities/GlobalUtils.dart';
 
 class ScoreBoard extends StatefulWidget {
@@ -49,6 +51,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
+    final LocalGame local = Get.put(LocalGame());
     return AnimatedContainer(
         alignment: Alignment.center,
         width: (widget.currState == Wins.ONGOING)
@@ -90,6 +93,13 @@ class _ScoreBoardState extends State<ScoreBoard> {
                             )
                           : Container(),
                     ],
+                  ),
+                  Text(
+                    "[ ${local.p1score} - ${local.p2score} ]",
+                    style: GoogleFonts.roboto(
+                        fontSize: 36,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,

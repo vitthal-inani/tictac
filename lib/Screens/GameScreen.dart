@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:tic_tac/Models/LocalGame.dart';
 import 'package:tic_tac/Screens/ScoreBoard.dart';
 import 'package:tic_tac/Utilities/BoardPainter.dart';
 import 'package:tic_tac/Utilities/GlobalUtils.dart';
@@ -12,33 +14,47 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  List board = [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""]
-  ];
-  int cntr = 0;
-  Wins winstate = Wins.ONGOING;
-
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
+    final LocalGame local = Get.put(LocalGame());
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: Icon(
-                Icons.close,
-                color: Colors.red,
-              ))),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.close,
+              color: Colors.red,
+              size: 24,
+            )),
+        actions: [
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+                elevation: 0, primary: Colors.transparent),
+            onPressed: () {
+              setState(() {
+                local.clear();
+              });
+            },
+            icon: Icon(
+              Icons.refresh_sharp,
+              color: Colors.blue,
+            ),
+            label: Text(
+              "Clear",
+              style: GoogleFonts.montserrat(color: Colors.blue, fontSize: 18),
+            ),
+          )
+        ],
+      ),
       body: Column(
         children: [
           IgnorePointer(
-            ignoring: (winstate == Wins.ONGOING) ? false : true,
+            ignoring: (local.winstate == Wins.ONGOING) ? false : true,
             child: SizedBox(
               height: _size.height * 0.6,
               width: _size.width,
@@ -54,62 +70,67 @@ class _GameScreenState extends State<GameScreen> {
                         int y = ((3 * (dragdetails.localPosition.dx)) /
                                 constraints.maxWidth)
                             .floor();
-                        if (board[x][y] == "")
+                        if (local.board[x][y] == "")
                           setState(() {
-                            if (cntr % 2 == 0)
-                              board[x][y] = "O";
+                            if (local.cntr % 2 == 0)
+                              local.board[x][y] = "O";
                             else
-                              board[x][y] = "X";
-                            cntr++;
+                              local.board[x][y] = "X";
+                            local.cntr++;
                           });
                         for (int i = 0; i < 3; i++) {
-                          if ((board[i][0] == board[i][1]) &&
-                              (board[i][1] == board[i][2]) &&
-                              (board[i][0] != "")) {
+                          if ((local.board[i][0] == local.board[i][1]) &&
+                              (local.board[i][1] == local.board[i][2]) &&
+                              (local.board[i][0] != "")) {
                             print("Row" + i.toString());
-                            winstate = (board[i][0] == "O")
+                            local.winstate = (local.board[i][0] == "O")
                                 ? Wins.P1_WINS
                                 : Wins.P2_WINS;
                           }
-                          if ((board[0][i] == board[1][i]) &&
-                              (board[1][i] == board[2][i]) &&
-                              (board[0][i] != "")) {
+                          if ((local.board[0][i] == local.board[1][i]) &&
+                              (local.board[1][i] == local.board[2][i]) &&
+                              (local.board[0][i] != "")) {
                             print("Column " +
                                 i.toString() +
                                 " " +
-                                board[0][1].toString());
-                            winstate = (board[0][i] == "O")
+                                local.board[0][1].toString());
+                            local.winstate = (local.board[0][i] == "O")
                                 ? Wins.P1_WINS
                                 : Wins.P2_WINS;
                           }
                         }
-                        if ((board[0][0] == board[1][1]) &&
-                            (board[1][1] == board[2][2]) &&
-                            (board[0][0] != ""))
-                          winstate = (board[0][0] == "O")
+                        if ((local.board[0][0] == local.board[1][1]) &&
+                            (local.board[1][1] == local.board[2][2]) &&
+                            (local.board[0][0] != ""))
+                          local.winstate = (local.board[0][0] == "O")
                               ? Wins.P1_WINS
                               : Wins.P2_WINS;
-                        if ((board[0][2] == board[1][1]) &&
-                            (board[1][1] == board[2][0]) &&
-                            (board[2][0] != ""))
-                          winstate = (board[0][2] == "O")
+                        else if ((local.board[0][2] == local.board[1][1]) &&
+                            (local.board[1][1] == local.board[2][0]) &&
+                            (local.board[2][0] != ""))
+                          local.winstate = (local.board[0][2] == "O")
                               ? Wins.P1_WINS
                               : Wins.P2_WINS;
-                        if (winstate == Wins.ONGOING) {
+                        if (local.winstate == Wins.ONGOING) {
                           int emps = 0;
-                          board.forEach((element) {
+                          local.board.forEach((element) {
                             element.forEach((e) {
                               if (e == "") emps++;
                             });
                           });
-                          if (emps == 0) winstate = Wins.DRAW;
+                          if (emps == 0) local.winstate = Wins.DRAW;
                         }
-                        setState(() {});
-                        print(x.toString() + " " + y.toString());
+                        setState(() {
+                          if (local.winstate == Wins.P1_WINS)
+                            local.p1score++;
+                          else if (local.winstate == Wins.P2_WINS)
+                            local.p2score++;
+                        });
+                        // print(x.toString() + " " + y.toString());
                       },
                       child: Container(
                         child: CustomPaint(
-                          painter: Board(board),
+                          painter: Board(local.board),
                         ),
                       ),
                     );
@@ -121,9 +142,8 @@ class _GameScreenState extends State<GameScreen> {
           Container(
             height: _size.height * 0.25,
             child: ScoreBoard(
-              key: Key("123"),
-              cntr: cntr,
-              currState: winstate,
+              cntr: local.cntr,
+              currState: local.winstate,
             ),
           )
         ],
