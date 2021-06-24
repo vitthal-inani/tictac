@@ -23,6 +23,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Flutter Runner
-        uses: jddeep/Flutter-Runner@1.2.0
+      - name: flutter-cli
+        uses: steebchen/flutter@v1.1.0
+
 
