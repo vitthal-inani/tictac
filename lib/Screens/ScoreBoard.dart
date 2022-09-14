@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tic_tac/Models/LocalGame.dart';
 import 'package:tic_tac/Utilities/GlobalUtils.dart';
+import 'package:tic_tac/Utilities/fonts.dart';
 
 class ScoreBoard extends StatefulWidget {
   const ScoreBoard({Key? key, required this.currState, required this.cntr})
@@ -69,8 +70,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
                     children: [
                       Text(
                         "P1",
-                        style: GoogleFonts.bowlbyOne(
-                            fontSize: 48, color: Colors.green),
+                        style: bowlbyOne.copyWith(fontSize: 48, color: Colors.green),
                       ),
                       (widget.cntr % 2 == 0)
                           ? SizedBox(
@@ -85,7 +85,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
                                   ),
                                   Text(
                                     "O",
-                                    style: GoogleFonts.montserrat(
+                                    style: montserrat.copyWith(
                                         fontSize: 32, color: Colors.green),
                                   )
                                 ],
@@ -122,7 +122,7 @@ class _ScoreBoardState extends State<ScoreBoard> {
                                   ),
                                   Text(
                                     "X",
-                                    style: GoogleFonts.montserrat(
+                                    style: montserrat.copyWith(
                                         fontSize: 32, color: Colors.red),
                                   )
                                 ],
@@ -134,6 +134,6 @@ class _ScoreBoardState extends State<ScoreBoard> {
                 ],
               )
             : getText(widget.currState),
-        duration: Duration(milliseconds: 100));
+        duration: Duration(milliseconds: 200));
   }
 }

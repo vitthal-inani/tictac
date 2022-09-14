@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:audioplayers/audioplayers.dart';
+// import 'package:tic_tac/Models/AppData.dart';
 import 'package:tic_tac/Models/LocalGame.dart';
 import 'package:tic_tac/Screens/ScoreBoard.dart';
 import 'package:tic_tac/Utilities/BoardPainter.dart';
 import 'package:tic_tac/Utilities/GlobalUtils.dart';
+import 'package:tic_tac/Utilities/fonts.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({Key? key}) : super(key: key);
@@ -14,10 +17,14 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
+  // AudioCache back = new AudioCache();
+  // AudioPlayer? player;
+
   @override
   Widget build(BuildContext context) {
     final _size = MediaQuery.of(context).size;
     final LocalGame local = Get.put(LocalGame());
+    // final AppData gameData = Get.put(AppData());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -28,13 +35,22 @@ class _GameScreenState extends State<GameScreen> {
             },
             icon: Icon(
               Icons.close,
-              color: Colors.red,
-              size: 24,
+              color: Colors.deepOrangeAccent,
+              size: 32,
             )),
         actions: [
+          IconButton(
+              onPressed: () {
+                // AudioCache audioCache = new AudioCache(respectSilence: true);
+                // audioCache.load("sounds/coins.mp3");
+                // audioCache.play("sounds/coins.mp3", volume: 0.1);
+                // audioCache
+                // // AudioCache().play("assets/sounds/coins.mp3");
+              },
+              icon: Icon(Icons.speaker)),
           ElevatedButton.icon(
             style: ElevatedButton.styleFrom(
-                elevation: 0, primary: Colors.transparent),
+                elevation: 0, backgroundColor: Colors.transparent),
             onPressed: () {
               showDialog(
                   context: context,
@@ -42,7 +58,7 @@ class _GameScreenState extends State<GameScreen> {
                     return Dialog(
                       child: Container(
                         alignment: Alignment.center,
-                        height: _size.height * 0.5,
+                        height: _size.height * 0.6,
                         padding:
                             EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                         child: SizedBox(
@@ -52,8 +68,9 @@ class _GameScreenState extends State<GameScreen> {
                               Wrap(children: [
                                 Text(
                                   "Select the player that goes first",
-                                  style: GoogleFonts.montserrat(
-                                      fontSize: 32, color: Colors.black),
+                                  style: montserrat.copyWith(
+                                      fontSize: _size.width / 12,
+                                      color: Colors.black),
                                   textAlign: TextAlign.center,
                                 ),
                               ]),
@@ -63,7 +80,8 @@ class _GameScreenState extends State<GameScreen> {
                                 child: Text(
                                   "Random",
                                   style: GoogleFonts.bowlbyOne(
-                                      fontSize: 40, color: Colors.white),
+                                      fontSize: _size.width / 12,
+                                      color: Colors.white),
                                 ),
                               ),
                               Row(
@@ -73,19 +91,41 @@ class _GameScreenState extends State<GameScreen> {
                                   ElevatedButton(
                                     onPressed: () =>
                                         Navigator.pop(context, "P1"),
-                                    child: Text(
-                                      "P1",
-                                      style: GoogleFonts.bowlbyOne(
-                                          fontSize: 48, color: Colors.white),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "P1",
+                                          style: GoogleFonts.bowlbyOne(
+                                              fontSize: _size.width / 12,
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          "O",
+                                          style: GoogleFonts.bowlbyOne(
+                                              fontSize: _size.width / 10,
+                                              color: Colors.green),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   ElevatedButton(
                                     onPressed: () =>
                                         Navigator.pop(context, "P2"),
-                                    child: Text(
-                                      "P2",
-                                      style: GoogleFonts.bowlbyOne(
-                                          fontSize: 48, color: Colors.white),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          "P2",
+                                          style: GoogleFonts.bowlbyOne(
+                                              fontSize: _size.width / 12,
+                                              color: Colors.white),
+                                        ),
+                                        Text(
+                                          "X",
+                                          style: GoogleFonts.bowlbyOne(
+                                              fontSize: _size.width / 10,
+                                              color: Color(0xff8B0000)),
+                                        ),
+                                      ],
                                     ),
                                   )
                                 ],
@@ -104,10 +144,11 @@ class _GameScreenState extends State<GameScreen> {
             icon: Icon(
               Icons.refresh_sharp,
               color: Colors.blue,
+              size: 28,
             ),
             label: Text(
-              "Clear",
-              style: GoogleFonts.montserrat(color: Colors.blue, fontSize: 18),
+              "Restart",
+              style: montserrat.copyWith(color: Colors.blue, fontSize: 22),
             ),
           )
         ],
@@ -117,7 +158,7 @@ class _GameScreenState extends State<GameScreen> {
           IgnorePointer(
             ignoring: (local.winstate == Wins.ONGOING) ? false : true,
             child: SizedBox(
-              height: _size.height * 0.6,
+              height: _size.height * 0.59,
               width: _size.width,
               child: Container(
                 padding: EdgeInsets.all(20),
@@ -131,7 +172,7 @@ class _GameScreenState extends State<GameScreen> {
                         int y = ((3 * (dragdetails.localPosition.dx)) /
                                 constraints.maxWidth)
                             .floor();
-                        if (local.board[x][y] == "")
+                        if (local.board[x][y] == "") {
                           setState(() {
                             if (local.cntr % 2 == 0)
                               local.board[x][y] = "O";
@@ -139,6 +180,13 @@ class _GameScreenState extends State<GameScreen> {
                               local.board[x][y] = "X";
                             local.cntr++;
                           });
+                          // if (gameData.sound) {
+                          //   AudioCache audioCache =
+                          //       new AudioCache(respectSilence: true);
+                          //   audioCache.load("sounds/coins.mp3");
+                          //   audioCache.play("sounds/coins.mp3", volume: 0.1);
+                          // }
+                        }
                         for (int i = 0; i < 3; i++) {
                           if ((local.board[i][0] == local.board[i][1]) &&
                               (local.board[i][1] == local.board[i][2]) &&
@@ -181,12 +229,25 @@ class _GameScreenState extends State<GameScreen> {
                           });
                           if (emps == 0) local.winstate = Wins.DRAW;
                         }
+                        // if (local.winstate == Wins.DRAW && gameData.sound) {
+                        //   AudioCache gamEnd =
+                        //       new AudioCache(respectSilence: true);
+                        //   gamEnd.load("sounds/death.wav");
+                        //   gamEnd.play("sounds/death.wav", volume: 0.3);
+                        // } else if (local.winstate != Wins.ONGOING &&
+                        //     gameData.sound) {
+                        //   AudioCache gamEnd =
+                        //       new AudioCache(respectSilence: true);
+                        //   gamEnd.load("sounds/round_end.wav");
+                        //   gamEnd.play("sounds/round_end.wav", volume: 0.1);
+                        // }
                         setState(() {
                           if (local.winstate == Wins.P1_WINS)
                             local.p1score++;
                           else if (local.winstate == Wins.P2_WINS)
                             local.p2score++;
                         });
+
                         // print(x.toString() + " " + y.toString());
                       },
                       child: Container(
